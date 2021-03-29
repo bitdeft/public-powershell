@@ -89,7 +89,7 @@ Invoke-WebRequest -Uri $DLink2 -OutFile "C:\Windows\Temp\msteams_sa\install\MsRd
 # install Teams Websocket Service
 Start-Process C:\Windows\System32\msiexec.exe -ArgumentList '/i C:\Windows\Temp\msteams_sa\install\MsRdcWebRTCSvc_x64.msi /l*v C:\temp\msteams\WebRTC_install_log.txt /qn /norestart' -Wait
 
-write-host "Finished running installers. Check C:\Windows\Temp\msteams_sa for logs on the MSI installations."
+write-host "Finished running installers. Check C:\temp\msteams_sa for logs on the MSI installations."
 
 #endregion
 
