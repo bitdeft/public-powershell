@@ -1,9 +1,9 @@
 <# 
-    This script preforms the follwoing:
+    This script performs the following:
     1. Sets registry value for teams to WVD Mode
     2. Uninstall MSTeams and WebRTC program
-    3. Downloads and Installs latest version of MSTeams machine-wide (Not per-user)
-    4. Downloads and Installs latest version of WebRTC component
+    3. Downloads and installs latest version of MSTeams machine-wide (Not per-user)
+    4. Downloads and installs latest version of WebRTC component
     5. Sends logs to C:\temp\msteams
 #>
 
@@ -41,20 +41,20 @@ try {
     Remove-Item -path $TeamsPath -recurse -ErrorAction SilentlyContinue
 
 }
-catch  {
+catch {
     Write-Output "Uninstall failed with exception $_.exception.message"
 }
 
 # Per-Machine teams uninstall logic
 $GetTeams = get-wmiobject Win32_Product | Where-Object IdentifyingNumber -match "{731F6BAA-A986-45A4-8936-7C3AAAAA760B}"
-if ($null -ne $GetTeams){
+if ($null -ne $GetTeams) {
     Start-Process C:\Windows\System32\msiexec.exe -ArgumentList '/x "{731F6BAA-A986-45A4-8936-7C3AAAAA760B}" /qn /norestart' -Wait
     Write-Host "Teams per-machine Install Found, uninstalling teams"
 }
 
 # WebRTC uninstall logic
 $GetWebRTC = get-wmiobject Win32_Product | Where-Object IdentifyingNumber -match "{FB41EDB3-4138-4240-AC09-B5A184E8F8E4}"
-if ($null -ne $GetWebRTC){
+if ($null -ne $GetWebRTC) {
     Start-Process C:\Windows\System32\msiexec.exe -ArgumentList '/x "{FB41EDB3-4138-4240-AC09-B5A184E8F8E4}" /qn /norestart' -Wait
     Write-Host "WebRTC Install Found, uninstalling Current version of WebRTC"
 }
@@ -78,9 +78,8 @@ Start-Process C:\Windows\System32\msiexec.exe -ArgumentList  '/i C:\Windows\Temp
 $MSDlSite2 = Invoke-WebRequest "https://docs.microsoft.com/en-us/azure/virtual-desktop/teams-on-wvd" -UseBasicParsing
 
 # parse through the MS Docs page to get the most up-to-date download link
-ForEach ($Href in $MSDlSite2.Links.Href)
-{
-    if ($Href -match "https://query.prod.cms.rt.microsoft.com/cms/api/am/binary" ){
+ForEach ($Href in $MSDlSite2.Links.Href) {
+    if ($Href -match "https://query.prod.cms.rt.microsoft.com/cms/api/am/binary" ) {
         $DLink2 = $href
     }
 }
